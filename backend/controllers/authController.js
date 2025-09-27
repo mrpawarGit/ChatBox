@@ -5,6 +5,7 @@ const response = require("../utils/responseHandler"); // custom response helper
 const twilioService = require("../services/twilioService");
 const generateToken = require("../utils/generateToken");
 const { uploadFileToCloudinary } = require("../config/cloudinaryConfig");
+const ConversationModel = require("../models/conversation.model");
 
 const sendOtp = async (req, res) => {
   const { phoneNumber, phoneSuffix, email } = req.body;
@@ -168,7 +169,7 @@ const checkAuthenticated = async (req, res) => {
       return response(res, 404, "User Not Found");
     }
 
-    return response(res, 200, "User retrived and allowed to use chatBox");
+    return response(res, 200, "User retrived and allowed to use chatBox", user);
   } catch (error) {
     console.error(error);
     return response(res, 500, "Internal Server Error");
@@ -186,10 +187,53 @@ const logout = (req, res) => {
   }
 };
 
+// Get all users except the logged-in user
+const getAllUsers = async (req, res) => {
+  const loggedInUser = req.user.userID; // get logged-in user ID from authMiddleware
+  try {
+    // Fetch all users except the logged-in user
+    const users = await UserModel.find({ _id: { $ne: loggedInUser } })
+      .select(
+        "username profilePicture lastSeen isOnline about phoneNumber phoneSuffix"
+      )
+      .lean();
+
+    // Attach conversation info for each user
+    const usersWithConversations = await Promise.all(
+      users.map(async (user) => {
+        const conversation = await ConversationModel.findOne({
+          participants: { $all: [loggedInUser, user._id] },
+        })
+          .populate({
+            path: "lastMessage",
+            select: "content createdAt sender receiver",
+          })
+          .lean();
+
+        return {
+          ...user,
+          conversation: conversation || null,
+        };
+      })
+    );
+
+    return response(
+      res,
+      200,
+      "Users Retrieved Successfully",
+      usersWithConversations
+    );
+  } catch (error) {
+    console.error("getAllUsers error:", error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
+
 module.exports = {
   sendOtp,
   verifyOtp,
   updateProfile,
   logout,
   checkAuthenticated,
+  getAllUsers,
 };
