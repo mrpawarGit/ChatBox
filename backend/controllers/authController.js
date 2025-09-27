@@ -122,7 +122,6 @@ const verifyOtp = async (req, res) => {
 };
 
 // update profile
-
 const updateProfile = async (req, res) => {
   const { username, agreed, about } = req.body;
   const userID =
@@ -144,7 +143,7 @@ const updateProfile = async (req, res) => {
     if (agreed) user.agreed = agreed;
     if (about) user.about = about;
     await user.save();
-
+    // console.log(user);
     return response(res, 200, "user profile updated successfully", user);
   } catch (error) {
     console.error(error);
@@ -152,4 +151,15 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { sendOtp, verifyOtp, updateProfile };
+// logout
+const logout = (req, res) => {
+  try {
+    res.cookie("auth_token", "", { expires: new Date(0) });
+    return response(res, 200, "Logout Sucessfully");
+  } catch (error) {
+    console.error(error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
+
+module.exports = { sendOtp, verifyOtp, updateProfile, logout };
