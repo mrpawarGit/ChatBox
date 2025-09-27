@@ -4,6 +4,7 @@ const {
   verifyOtp,
   updateProfile,
   logout,
+  checkAuthenticated,
 } = require("../controllers/authController");
 const authMiddleware = require("../middleware/authMiddleware");
 const { multerMiddleware } = require("../config/cloudinaryConfig");
@@ -16,4 +17,6 @@ router.get("/logout", logout);
 
 // protected route
 router.put("/update-profile", authMiddleware, multerMiddleware, updateProfile);
+router.get("/check-auth", authMiddleware, checkAuthenticated);
+
 module.exports = router;
