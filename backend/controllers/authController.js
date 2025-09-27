@@ -4,6 +4,7 @@ const otpGenerator = require("../utils/otpGenerator");
 const response = require("../utils/responseHandler"); // custom response helper
 const twilioService = require("../services/twilioService");
 const generateToken = require("../utils/generateToken");
+const { uploadFileToCloudinary } = require("../config/cloudinaryConfig");
 
 const sendOtp = async (req, res) => {
   const { phoneNumber, phoneSuffix, email } = req.body;
@@ -115,9 +116,40 @@ const verifyOtp = async (req, res) => {
 
     return response(res, 200, "OTP verified successfully", { token, user });
   } catch (error) {
-    console.error("verifyOtp error:", error);
+    console.error(error);
     return response(res, 500, "Internal Server Error");
   }
 };
 
-module.exports = { sendOtp, verifyOtp };
+// update profile
+
+const updateProfile = async (req, res) => {
+  const { username, agreed, about } = req.body;
+  const userID =
+    (req.user && (req.user.id || req.user._id || req.user.userID)) || null;
+
+  try {
+    const user = await UserModel.findById(userID);
+    const file = req.file;
+
+    if (file) {
+      const uploadResult = await uploadFileToCloudinary(file);
+      console.log(uploadResult);
+      user.profilePicture = uploadResult?.secure_url;
+    } else if (req.body.profilePicture) {
+      user.profilePicture = req.body.profilePicture;
+    }
+
+    if (username) user.username = username;
+    if (agreed) user.agreed = agreed;
+    if (about) user.about = about;
+    await user.save();
+
+    return response(res, 200, "user profile updated successfully", user);
+  } catch (error) {
+    console.error(error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
+
+module.exports = { sendOtp, verifyOtp, updateProfile };
