@@ -151,6 +151,30 @@ const updateProfile = async (req, res) => {
   }
 };
 
+// check if user is authenticated
+const checkAuthenticated = async (req, res) => {
+  try {
+    const userID = req.user?.userID;
+    if (!userID) {
+      return response(
+        res,
+        404,
+        "Unauthorized : please login before accessing application"
+      );
+    }
+
+    const user = await UserModel.findById(userID);
+    if (!user) {
+      return response(res, 404, "User Not Found");
+    }
+
+    return response(res, 200, "User retrived and allowed to use chatBox");
+  } catch (error) {
+    console.error(error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
+
 // logout
 const logout = (req, res) => {
   try {
@@ -162,4 +186,10 @@ const logout = (req, res) => {
   }
 };
 
-module.exports = { sendOtp, verifyOtp, updateProfile, logout };
+module.exports = {
+  sendOtp,
+  verifyOtp,
+  updateProfile,
+  logout,
+  checkAuthenticated,
+};
