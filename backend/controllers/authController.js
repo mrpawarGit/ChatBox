@@ -1,7 +1,7 @@
 const UserModel = require("../models/user.model");
 const sendOtpToEmail = require("../services/emailService");
 const otpGenerator = require("../utils/otpGenerator");
-const response = require("../utils/response"); // custom response helper
+const response = require("../utils/responseHandler"); // custom response helper
 const twilioService = require("../services/twilioService");
 const generateToken = require("../utils/generateToken");
 
