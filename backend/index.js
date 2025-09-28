@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectToDB = require("./config/db");
 const authRoute = require("./routes/authRoute");
+const chatRoute = require("./routes/chatRoute");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
@@ -20,6 +21,7 @@ connectToDB();
 
 // routes
 app.use("/api/auth", authRoute);
+app.use("/api/chat", chatRoute);
 
 // Test route to check if server is running
 app.get("/test", (req, res) => {
