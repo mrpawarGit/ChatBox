@@ -91,6 +91,7 @@ exports.sendMessage = async (req, res) => {
 // Get all conversations for the authenticated user
 exports.getConversation = async (req, res) => {
   const userID = req.user && (req.user.userID || req.user.id || req.user._id);
+
   try {
     if (!userID) {
       return response(res, 401, "Unauthorized");
