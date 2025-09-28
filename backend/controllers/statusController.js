@@ -1,6 +1,6 @@
 const { uploadFileToCloudinary } = require("../config/cloudinaryConfig");
 const StatusModel = require("../models/status.model");
-const response = require("../utils/responseHandler"); // keep your existing helper name/path
+const response = require("../utils/responseHandler");
 
 // Create a status (text, image or video)
 exports.createStatus = async (req, res) => {
@@ -79,6 +79,54 @@ exports.getStatus = async (req, res) => {
     return response(res, 200, "Status retrived succesfully", statuses);
   } catch (error) {
     console.error("getStatus error:", error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
+
+// viewStatus
+exports.viewStatus = async (req, res) => {
+  const { statusId } = req.params;
+  const userID = req.user.userID;
+  try {
+    const status = await StatusModel.findById(statusId);
+    if (!status) {
+      return response(res, 404, "Status not found");
+    }
+    if (!status.viewers.includes(userID)) {
+      status.viewers.push(userID);
+      await status.save();
+
+      const updatedStatus = await StatusModel.findById(statusId)
+        .populate("user", "username profilePicture")
+        .populate("viewers", "username profilePicture");
+    } else {
+      console.log("User Alredy viewed Status");
+    }
+    return response(res, 200, "Status Viewd Sucessfully");
+  } catch (error) {
+    console.error("viewStatus error:", error);
+    return response(res, 500, "Internal Server Error");
+  }
+};
+
+// deleteStatus
+exports.deleteStatus = async (req, res) => {
+  const { statusId } = req.params;
+  const userID = req.user.userID;
+  try {
+    const status = await StatusModel.findById(statusId);
+    if (!status) {
+      return response(res, 404, "Status not found");
+    }
+    if (status.user.toString() !== userID) {
+      return response(res, 403, "Not authorized to delete this status");
+    }
+
+    await status.deleteOne();
+
+    return response(res, 200, "Status deleted successfully");
+  } catch (error) {
+    console.error("deleteStatus error:", error);
     return response(res, 500, "Internal Server Error");
   }
 };
