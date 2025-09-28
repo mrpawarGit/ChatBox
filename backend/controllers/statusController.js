@@ -59,6 +59,16 @@ exports.createStatus = async (req, res) => {
       .populate("viewers", "username profilePicture")
       .lean();
 
+    // Emit socket event
+    if (req.io && req.socketUserMap) {
+      // broad to all coonectin user except creator/user
+      for (const [connectedUserId, socketId] of req.socketUserMap) {
+        if (connectedUserId !== userID) {
+          req.io.to(socketId).emit("new_status", populatedStatus);
+        }
+      }
+    }
+
     return response(res, 201, "Status created successfully", populatedStatus);
   } catch (error) {
     console.error("createStatus error:", error);
@@ -99,6 +109,26 @@ exports.viewStatus = async (req, res) => {
       const updatedStatus = await StatusModel.findById(statusId)
         .populate("user", "username profilePicture")
         .populate("viewers", "username profilePicture");
+
+      // Emit socket event
+      if (req.io && req.socketUserMap) {
+        // broad to all coonectin user except creator/user
+        const statusOwnerSocketId = req.socketUserMap.get(
+          status.user._id.toString()
+        );
+        if (statusOwnerSocketId) {
+          const viewData = {
+            statusId,
+            viewerId: userID,
+            totalViewers: updatedStatus.viewers.length,
+            viewers: updatedStatus.viewers,
+          };
+
+          req.io.to(statusOwnerSocketId).emit("status_viewed", viewData);
+        } else {
+          console.log("status owner not connected");
+        }
+      }
     } else {
       console.log("User Alredy viewed Status");
     }
@@ -123,6 +153,15 @@ exports.deleteStatus = async (req, res) => {
     }
 
     await status.deleteOne();
+
+    // Emit socket event
+    if (req.io && req.socketUserMap) {
+      for (const [connectedUserId, socketId] of req.socketUserMap) {
+        if (connectedUserId !== userID) {
+          req.io.to(socketId).emit("status_deleted", statusId);
+        }
+      }
+    }
 
     return response(res, 200, "Status deleted successfully");
   } catch (error) {

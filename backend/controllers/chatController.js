@@ -81,6 +81,16 @@ exports.sendMessage = async (req, res) => {
       .populate("receiver", "username profilePicture")
       .lean();
 
+    // Emit socket event for realtime
+    if (req.io && req.socketUserMap) {
+      const receiverSocketId = req.socketUserMap.get(receiverId);
+      if (receiverSocketId) {
+        req.io.to(receiverSocketId).emit("receive_message", populatedMessage);
+        message.messageStatus = "delivered";
+        await message.save();
+      }
+    }
+
     return response(res, 201, "Message sent successfully", populatedMessage);
   } catch (error) {
     console.error("sendMessage error:", error);
@@ -194,6 +204,22 @@ exports.markAsRead = async (req, res) => {
       { _id: { $in: messageId } },
       { $set: { messageStatus: "read" } }
     );
+
+    // Emit socket event for notify to original sender
+    if (req.io && req.socketUserMap) {
+      for (const msg of message) {
+        const senderSocketId = req.socketUserMap.get(msg.sender.toString());
+        if (senderSocketId) {
+          const updatedMessage = {
+            _id: msg._id,
+            messageStatus: "read",
+          };
+          req.io.to(senderSocketId).emit("message_read", updatedMessage);
+          await message.save();
+        }
+      }
+    }
+
     return response(res, 200, "Messages marks as read", message);
   } catch (error) {
     console.error("markAsRead error:", error);
@@ -246,6 +272,16 @@ exports.deleteMessage = async (req, res) => {
     } catch (updErr) {
       // Log but don't fail the whole request if conversation update fails
       console.error("Failed to update conversation lastMessage:", updErr);
+    }
+
+    // Emit socket event
+    if (req.io && req.socketUserMap) {
+      const receiverSocketId = req.socketUserMap.get(
+        message.receiver.toString()
+      );
+      if (receiverSocketId) {
+        req.io.to(receiverSocketId).emit("message_deleted", messageId);
+      }
     }
 
     return response(res, 200, "Message deleted successfully", { messageId });
