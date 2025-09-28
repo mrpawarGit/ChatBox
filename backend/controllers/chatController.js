@@ -182,41 +182,18 @@ exports.getMessages = async (req, res) => {
 // mark messages as read
 exports.markAsRead = async (req, res) => {
   const { messageId } = req.body;
-  const userID = req.user && (req.user.userID || req.user.id || req.user._id);
-
+  const userID = req.user.userID;
   try {
-    if (!messageId) {
-      return response(res, 400, "messageId is required");
-    }
-
-    // Normalize to array of ids
-    const ids = Array.isArray(messageId) ? messageId : [messageId];
-
-    // Only target messages that belong to this user as receiver
-    const filter = {
-      _id: { $in: ids },
+    // get relevant message to determine sender
+    let message = await MessageModel.find({
+      _id: { $in: messageId },
       receiver: userID,
-    };
-
-    // Find messages we will update (use lean for performance)
-    const messagesToUpdate = await MessageModel.find(filter).lean();
-
-    if (!messagesToUpdate || messagesToUpdate.length === 0) {
-      return response(res, 404, "No messages found to mark as read");
-    }
-
-    // Update matching messages
-    const updateResult = await MessageModel.updateMany(filter, {
-      $set: { messageStatus: "read" },
     });
-
-    // Respond with summary and the list of updated message ids
-    const updatedIds = messagesToUpdate.map((m) => m._id);
-
-    return response(res, 200, "Messages marked as read", {
-      updatedCount: updateResult.modifiedCount ?? updateResult.nModified ?? 0,
-      updatedIds,
-    });
+    await MessageModel.updateMany(
+      { _id: { $in: messageId } },
+      { $set: { messageStatus: "read" } }
+    );
+    return response(res, 200, "Messages marks as read", message);
   } catch (error) {
     console.error("markAsRead error:", error);
     return response(res, 500, "Internal Server Error");
