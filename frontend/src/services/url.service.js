@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const apiUrl = `${import.meta.env.VITE_API_URL}/api`;
+const apiUrl = `${process.env.REACT_APP_API_URL}/api`;
 
 const getToken = () => localStorage.getItem("auth_token");
 
 const axiosInstance = axios.create({
   baseURL: apiUrl,
-  withCredentials: true,
+  withCredentials:true
 });
 
 // Attach token to every request
