@@ -1,10 +1,10 @@
-const nodemailer = require('nodemailer') 
-const dotenv = require('dotenv')
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -13,20 +13,20 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify((error, success) => {
   if (error) {
-    console.error('SMTP Configuration Error:', error);
+    console.error("SMTP Configuration Error:", error);
   } else {
-    console.log('SMTP is configured properly and ready to send emails.');
+    console.log("SMTP is configured properly and ready to send emails.");
   }
 });
 
 const sendOtpToEmail = async (email, otp) => {
   const html = `
     <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-      <h2 style="color: #075e54;">🔐 WhatsApp Web Verification</h2>
+      <h2 style="color: #4a90e2;">🔐 ChatBox Verification</h2>
       
       <p>Hi there,</p>
       
-      <p>Your one-time password (OTP) to verify your WhatsApp Web account is:</p>
+      <p>Your one-time password (OTP) to verify your ChatBox account is:</p>
       
       <h1 style="background: #e0f7fa; color: #000; padding: 10px 20px; display: inline-block; border-radius: 5px; letter-spacing: 2px;">
         ${otp}
@@ -36,7 +36,7 @@ const sendOtpToEmail = async (email, otp) => {
 
       <p>If you didn’t request this OTP, please ignore this email.</p>
 
-      <p style="margin-top: 20px;">Thanks & Regards,<br/>WhatsApp Web Security Team</p>
+      <p style="margin-top: 20px;">Thanks & Regards,<br/>ChatBox Security Team</p>
 
       <hr style="margin: 30px 0;" />
 
@@ -45,12 +45,11 @@ const sendOtpToEmail = async (email, otp) => {
   `;
 
   await transporter.sendMail({
-    from: `"WhatsApp Web" <${process.env.EMAIL_USER}>`,
+    from: `"ChatBox" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: 'Your WhatsApp Verification Code',
+    subject: "Your ChatBox Verification Code",
     html,
   });
 };
-
 
 module.exports = sendOtpToEmail;
