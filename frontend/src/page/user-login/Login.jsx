@@ -9,7 +9,7 @@ import {
   FaArrowLeft,
   FaChevronDown,
 } from "react-icons/fa";
-import { IoChatbubble } from "react-icons/io5";
+import logoImg from "../../images/whatsapp_image.png";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -295,10 +295,11 @@ const Login = () => {
             stiffness: 260,
             damping: 20,
           }}
-          className="w-24 h-24 bg-green-500 rounded-full mx-auto mb-6 flex items-center justify-center"
+          className="w-24 h-24 bg-green-500 rounded-full mx-auto mb-6 flex items-center justify-center overflow-hidden"
         >
-          <IoChatbubble className="w-16 h-16 text-white" />
+          <img src={logoImg} alt="Logo" className="w-16 h-16 object-contain" />
         </motion.div>
+
         <h1
           className={`text-3xl font-bold text-center mb-6 ${
             theme === "dark" ? "text-white" : "text-gray-800"
