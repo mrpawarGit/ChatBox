@@ -1,16 +1,14 @@
-const response = (res, statusCode, message, data = {}) => {
-  if (!res) {
-    console.error("Response object is null");
-    return;
-  }
+const response = (res,stateCode,message,data=null)=>{
+    if (!res) {
+        console.error("Response object is null");
+        return; // Handle null response object
+    }
+    const responseObject = {
+        status:stateCode < 400 ? 'success' : 'error',
+        message,
+        data
+    }
+    return res.status(stateCode).json(responseObject)
+}
 
-  const responseObject = {
-    status: statusCode < 400 ? "success" : "error",
-    message,
-    data,
-  };
-
-  return res.status(statusCode).json(responseObject);
-};
-
-module.exports = response;
+module.exports= response;
