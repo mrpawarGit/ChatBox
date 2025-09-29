@@ -18,7 +18,7 @@ import useThemeStore from "../../store/themeStore";
 import useUserStore from "../../store/useUserStore";
 import useOutsideClick from "../../hooks/useOutsideClick";
 import { useChatStore } from "../../store/chatStore";
-import whatsappImage from "../../images/whatsapp_image.png";
+import logoImg from "../../images/whatsapp_image.png";
 import useVideoCallStore from "../../store/videoCallStore";
 import VideoCallManager from "../VideoCall/VideoCallManager";
 import { getSocket } from "../../services/chat.service";
@@ -257,11 +257,7 @@ export default function ChatWindow({ selectedContact, setSelectedContact }) {
     return (
       <div className="flex-1  flex flex-col items-center justify-center mx-auto h-screen text-center">
         <div className="max-w-md">
-          <img
-            src={whatsappImage}
-            alt="Chat Application"
-            className="w-full h-auto"
-          />
+          <img src={logoImg} alt="Chat Application" className="w-full h-auto" />
           <h2
             className={`text-3xl font-semibold mb-4 ${
               theme === "dark" ? "text-white" : "text-black"
