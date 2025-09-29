@@ -1,16 +1,16 @@
-# React + Vite
+### 🖥️ Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+* **react** – Core frontend library for building UI.
+* **react-router-dom** – Handles client-side routing and navigation.
+* **socket.io-client** – Connects the frontend to the backend for real-time messaging.
+* **axios** – Simplifies API requests to the backend.
+* **zustand** – Lightweight state management solution for React.
+* **react-hook-form & yup** – Form handling and validation.
+* **react-toastify** – Beautiful toast notifications (success, error, etc.).
+* **emoji-picker-react & @emoji-mart/react** – Adds emoji picker support in chat.
+* **react-icons** – Provides a large set of customizable icons.
+* **framer-motion** – Smooth animations and transitions in UI.
+* **react-phone-input-2** – Phone number input with country code support.
+* **date-fns** – Date/time formatting for messages.
+* **tailwindcss & daisyui** – Utility-first CSS + component library for styling.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
