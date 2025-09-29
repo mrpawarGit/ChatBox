@@ -80,7 +80,7 @@ chatBox/
 
 6. **Start the frontend app:**
    ```bash
-   cd ../frontend
+   cd frontend
    npm run dev
    ```
 
