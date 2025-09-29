@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 import { FaWhatsapp, FaUser, FaCog, FaUserCircle } from "react-icons/fa";
+import { IoChatbubble } from "react-icons/io5";
 import { MdRadioButtonChecked } from "react-icons/md"; // New icon for status
 import useStore from "../store/layoutStore";
 import userStore from "../store/useUserStore";
@@ -46,7 +47,7 @@ const Sidebar = () => {
           activeTab === "chats" && "bg-gray-300 shadow-sm p-2 rounded-full"
         } focus:outline-none`}
       >
-        <FaWhatsapp
+        <IoChatbubble
           className={`h-6 w-6 ${
             activeTab === "chats"
               ? theme === "dark"
