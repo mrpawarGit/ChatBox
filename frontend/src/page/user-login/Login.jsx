@@ -3,13 +3,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import {
-  FaWhatsapp,
   FaUser,
   FaCheck,
   FaPlus,
   FaArrowLeft,
   FaChevronDown,
 } from "react-icons/fa";
+import { IoChatbubble } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -195,7 +195,7 @@ const Login = () => {
         const user = response.data?.user;
         if (user?.username && user?.profilePicture) {
           setUser(user);
-          toast.success("Welcome back on WhatsApp");
+          toast.success("Welcome back on ChatBox");
           navigate("/");
           resetLoginState();
         } else {
@@ -229,7 +229,7 @@ const Login = () => {
         formData.append("profilePicture", selectedAvatar);
       }
       await updateUserProfile(formData);
-      toast.success("welcome back on whatsapp");
+      toast.success("welcome back on ChatBox");
       navigate("/");
       resetLoginState();
     } catch (error) {
@@ -297,14 +297,14 @@ const Login = () => {
           }}
           className="w-24 h-24 bg-green-500 rounded-full mx-auto mb-6 flex items-center justify-center"
         >
-          <FaWhatsapp className="w-16 h-16 text-white" />
+          <IoChatbubble className="w-16 h-16 text-white" />
         </motion.div>
         <h1
           className={`text-3xl font-bold text-center mb-6 ${
             theme === "dark" ? "text-white" : "text-gray-800"
           }`}
         >
-          WhatsApp Login
+          ChatBox Login
         </h1>
 
         <ProgressBar />
