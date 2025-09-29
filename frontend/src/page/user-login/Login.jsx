@@ -295,7 +295,7 @@ const Login = () => {
             stiffness: 260,
             damping: 20,
           }}
-          className="w-24 h-24 bg-green-500 rounded-full mx-auto mb-6 flex items-center justify-center overflow-hidden"
+          className="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center overflow-hidden"
         >
           <img src={logoImg} alt="Logo" className="w-16 h-16 object-contain" />
         </motion.div>
