@@ -134,7 +134,6 @@ export default function ChatWindow({ selectedContact, setSelectedContact }) {
       if (file.type.startsWith("image/") || file.type.startsWith("video/")) {
         setFilePreview(URL.createObjectURL(file));
       }
-      
     }
   };
 
@@ -153,7 +152,7 @@ export default function ChatWindow({ selectedContact, setSelectedContact }) {
       if (message.trim()) {
         formData.append("content", message.trim());
       }
-      console.log('this is selected file',selectedFile)
+      console.log("this is selected file", selectedFile);
       // If there's a file, include that too
       if (selectedFile) {
         formData.append("media", selectedFile, selectedFile.name);
@@ -177,7 +176,7 @@ export default function ChatWindow({ selectedContact, setSelectedContact }) {
     if (selectedContact && online) {
       // Get the initiateCall function from the store
       const { initiateCall } = useVideoCallStore.getState();
-      console.log('this is initial call',initiateCall)
+      console.log("this is initial call", initiateCall);
 
       console.log("Starting video call with selectedContact:", {
         id: selectedContact._id,
@@ -268,23 +267,20 @@ export default function ChatWindow({ selectedContact, setSelectedContact }) {
               theme === "dark" ? "text-white" : "text-black"
             }`}
           >
-            Select a conversation to start chatting
+            Start Talking
           </h2>
           <p
             className={`${
               theme === "dark" ? "text-gray-400" : "text-gray-600"
             } mb-6`}
           >
-            Choose a contact from the list on the left to begin messaging.
+            Instant Messaging app
           </p>
           <p
             className={`${
               theme === "dark" ? "text-gray-400" : "text-gray-600"
             } text-sm mt-8 flex items-center justify-center gap-2`}
-          >
-            <FaLock className="h-4 w-4" />
-            Your personal messages are end-to-end encrypted
-          </p>
+          ></p>
         </div>
       </div>
     );
