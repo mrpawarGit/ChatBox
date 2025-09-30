@@ -1,17 +1,9 @@
-// emailOptService.js
 const sgMail = require("@sendgrid/mail");
 const dotenv = require("dotenv");
 
 dotenv.config();
-
-// Set SendGrid API Key
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-/**
- * Send OTP email using SendGrid
- * @param {string} email - Recipient email
- * @param {string} otp - One-time password
- */
 const sendOtpToEmail = async (email, otp) => {
   const html = `
     <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -40,7 +32,10 @@ const sendOtpToEmail = async (email, otp) => {
   try {
     await sgMail.send({
       to: email,
-      from: process.env.FROM_EMAIL, // must be verified in SendGrid
+      from: {
+        email: process.env.FROM_EMAIL, // must be verified in SendGrid
+        name: "ChatBox", // optional display name
+      },
       subject: "Your ChatBox Verification Code",
       html,
     });
