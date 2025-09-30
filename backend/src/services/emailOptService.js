@@ -1,24 +1,17 @@
-const nodemailer = require("nodemailer");
+// emailOptService.js
+const sgMail = require("@sendgrid/mail");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Set SendGrid API Key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("SMTP Configuration Error:", error);
-  } else {
-    console.log("SMTP is configured properly and ready to send emails.");
-  }
-});
-
+/**
+ * Send OTP email using SendGrid
+ * @param {string} email - Recipient email
+ * @param {string} otp - One-time password
+ */
 const sendOtpToEmail = async (email, otp) => {
   const html = `
     <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -44,12 +37,18 @@ const sendOtpToEmail = async (email, otp) => {
     </div>
   `;
 
-  await transporter.sendMail({
-    from: `"ChatBox" <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: "Your ChatBox Verification Code",
-    html,
-  });
+  try {
+    await sgMail.send({
+      to: email,
+      from: process.env.FROM_EMAIL, // must be verified in SendGrid
+      subject: "Your ChatBox Verification Code",
+      html,
+    });
+    console.log(`OTP email sent successfully to ${email}`);
+  } catch (err) {
+    console.error("SendGrid Error:", err.response?.body || err.message);
+    throw err;
+  }
 };
 
 module.exports = sendOtpToEmail;
