@@ -104,7 +104,6 @@ chatBox/
 * **socket.io** – Enables real-time, bi-directional communication for chat.
 * **multer** – Middleware for handling file uploads (images, media).
 * **cloudinary & multer-storage-cloudinary** – Cloud-based storage and delivery of media files.
-* **passport & passport-google-oauth20** – OAuth2 integration for Google login.
 * **twilio** – Used for SMS/OTP-based authentication or notifications.
 * **nodemailer** – Sending verification or notification emails.
 * **cookie-parser** – Parse cookies for session/auth handling.
