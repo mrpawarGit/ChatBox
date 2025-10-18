@@ -11,6 +11,10 @@ ChatBox is a real-time chat application designed for fast, secure, and interacti
 
 ***
 
+<img width="1920" height="1080" alt="Screenshot (380)" src="https://github.com/user-attachments/assets/409c8fba-6bd6-4d4b-aa6d-c67489818c29" />
+
+***
+
 ## 🚀 Features
 
 - Real-time messaging with **Socket.IO** for instant updates[1]
