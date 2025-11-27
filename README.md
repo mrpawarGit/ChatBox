@@ -4,7 +4,7 @@ ChatBox is a real-time chat application designed for fast, secure, and interacti
 
 ***
 
-## 🚀 Deployed Links
+## 🚀🌐 Deployed Links
 
 * **Frontend:** [Frontend / Live App](https://chat-box-deployed-working.vercel.app/)
 * **Backend API:** [Backend](https://chatbox-ohdr.onrender.com)
